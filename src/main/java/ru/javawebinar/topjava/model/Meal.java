@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Meal {
     private final LocalDateTime dateTime;
@@ -18,6 +19,7 @@ public class Meal {
     }
 
     public LocalDateTime getDateTime() {
+        DateTimeFormatter.ofPattern("HH:mm yyyy-MM-dd").format(dateTime);
         return dateTime;
     }
 
