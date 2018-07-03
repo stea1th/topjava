@@ -36,7 +36,7 @@ public class MealsUtil {
     }*/
 
     public static List<MealWithExceed> getUnfilteredWithExceeded(List<Meal> meals, int caloriesPerDay){
-        return getFilteredWithExceeded(meals, LocalTime.of(0, 0), LocalTime.of(23, 59), 2000 );
+        return getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, 2000 );
     }
 
     public static List<MealWithExceed> getFilteredWithExceeded(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
@@ -112,6 +112,6 @@ public class MealsUtil {
     }
 
     public static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
-        return new MealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
+        return new MealWithExceed(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
     }
 }

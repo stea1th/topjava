@@ -1,25 +1,29 @@
 package ru.javawebinar.topjava.model;
 
+import ru.javawebinar.topjava.repository.MealRepository;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 public class Meal {
-    private final LocalDateTime dateTime;
-
-    private final String description;
-
-    private final int calories;
+    private final int id;
+    private  LocalDateTime dateTime;
+    private  String description;
+    private  int calories;
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
+        this.id = MealRepository.getId();
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public LocalDateTime getDateTime() {
-        DateTimeFormatter.ofPattern("HH:mm yyyy-MM-dd").format(dateTime);
         return dateTime;
     }
 
@@ -37,5 +41,17 @@ public class Meal {
 
     public LocalTime getTime() {
         return dateTime.toLocalTime();
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
     }
 }

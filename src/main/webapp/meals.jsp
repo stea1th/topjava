@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
 
+
 <html>
 <head>
     <title>Meals</title>
@@ -20,6 +21,7 @@
             color: white;
             text-align: left;
         }
+
     </style>
 </head>
 <body>
@@ -31,24 +33,23 @@
         <th>Описание</th>
         <th>Калории</th>
     </tr>
-    <c:forEach var="meal" items="${list}">
-        <c:choose>
-        <c:when test="${meal.isExceed()}">
-            <tr style="color: red">
-                <td><javatime:format value="${meal.getDateTime()}" pattern="yyyy-MM-dd HH:mm" /></td>
-                <td><c:out value="${meal.getDescription()}"/></td>
-                <td><c:out value="${meal.getCalories()}"/></td>
-            </tr>
-        </c:when>
-            <c:otherwise>
-                <tr style="color: green">
-                    <td><javatime:format value="${meal.getDateTime()}" pattern="yyyy-MM-dd HH:mm" /></td>
-                    <td><c:out value="${meal.getDescription()}"/></td>
-                    <td><c:out value="${meal.getCalories()}"/></td>
-                </tr>
-            </c:otherwise>
-        </c:choose>
-    </c:forEach>
+        <c:forEach var="meal" items="${list}">
+                    <tr style="color:${meal.isExceed()? 'red' : 'green'}">
+                        <td><javatime:format value="${meal.getDateTime()}" pattern="yyyy-MM-dd HH:mm" /></td>
+                        <td><c:out value="${meal.getDescription()}"/></td>
+                        <td><c:out value="${meal.getCalories()}"/></td>
+                        <td>
+                            <form method="post" action="meals?action=delete&mealId=<c:out value="${meal.getId()}"/> ">
+                                <button type="submit" name>Delete</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" action="meals?action=edit&mealId=<c:out value="${meal.getId()}"/> ">
+                                <button type="submit" name>Edit</button>
+                            </form>
+                        </td>
+                    </tr>
+        </c:forEach>
 </table>
 </body>
 </html>
