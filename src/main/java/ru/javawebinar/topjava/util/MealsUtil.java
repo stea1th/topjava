@@ -20,7 +20,8 @@ import static java.util.stream.Collectors.toList;
 public class MealsUtil {
 
     public static List<MealWithExceed> getUnfilteredWithExceeded(List<Meal> meals, int caloriesPerDay){
-        return getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, caloriesPerDay );
+        return getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, caloriesPerDay)
+                .stream().sorted(Comparator.comparing(MealWithExceed::getDateTime)).collect(Collectors.toList());
     }
 
     public static List<MealWithExceed> getFilteredWithExceeded(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
