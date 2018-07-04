@@ -14,19 +14,24 @@
 </head>
 <body>
 <div style="border: 1px solid #13cc1d;padding:5px;margin-bottom:20px;">
-    <form method="post" name="frmAddMeal">
+    <form method="post" action="meals?action=update">
         <table align="center">
             <tr >
+                <th width="100" align="right">ID:</th>
+                <td><input type="text" readonly="readonly" name="mealId"
+                       value="<c:out value="${meal.getId()}" />" /></td>
+            </tr>
+            <tr >
                 <th width="100" align="right">Дата:</th>
-                <td><input type="text" name="date" placeholder="Измените дату"/></td>
+                <td><input type="text" name="date" placeholder="<javatime:format value="${meal.getDateTime()}" pattern="yyyy-MM-dd HH:mm" />"/></td>
             </tr>
             <tr >
                 <th width="100" align="right">Описание:</th>
-                <td><input type="text" name="description" placeholder="Измените описание"/></td>
+                <td><input type="text" name="description" placeholder="<c:out value="${meal.getDescription()}" />"/></td>
             </tr>
             <tr >
                 <th width="100" align="right">Калории:</th>
-                <td><input type="text" name="calories" placeholder="Измените калории"/></td>
+                <td><input type="number" name="calories" placeholder="<c:out value="${meal.getCalories()}"/>"/></td>
             </tr>
             <tr >
                 <td colspan="2" align="right"><button type="submit">Update</button></td>

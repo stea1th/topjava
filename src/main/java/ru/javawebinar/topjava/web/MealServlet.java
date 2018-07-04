@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -21,8 +22,7 @@ public class MealServlet extends HttpServlet {
 
     private static final Logger log = getLogger(MealServlet.class);
     private MealService service;
-    private static String LIST_MEAL = "/meals.jsp";
-    private static String EDIT_MEAL = "/editMeal.jsp";
+    private Meal meal;
 
     public MealServlet() {
         super();
@@ -33,29 +33,29 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String forward = "";
         String action = req.getParameter("action");
+
         switch(action){
             case "delete" :
                 service.delete(Integer.parseInt(req.getParameter("mealId")));
-                forward = LIST_MEAL;
                 break;
             case "edit" :
-                int id = Integer.parseInt(req.getParameter("mealId"));
-                Meal meal = service.getMealById(id);
-                service.delete(id);
-                forward = EDIT_MEAL;
-                req.getRequestDispatcher(forward).forward(req, resp);
-                req.getParameter("calories");
-                System.out.println(req.getParameter("calories"));
-
-                //meal.setCalories(Integer.parseInt(req.getParameter("calories")));
-                System.out.println(req.getParameter("calories"));
-                //service.addMeal(meal);
-                //forward = LIST_MEAL;
-
+                String mealId = req.getParameter("mealId");
+                if(mealId != null) {
+                    int id = Integer.parseInt(mealId);
+                    meal = service.getMealById(id);
+                }else{
+                    meal = new Meal();
+                    meal.setDateTime(LocalDateTime.now());
+                }
+                req.setAttribute("meal", meal);
+                req.getRequestDispatcher("/editMeal.jsp").forward(req, resp);
+                break;
+            case "update" :
+                meal.setDescription(req.getParameter("description").equals("")? meal.getDescription() : req.getParameter("description"));
+                meal.setCalories(req.getParameter("calories").equals("")? meal.getCalories() : Integer.parseInt(req.getParameter("calories")));
+                service.editMeal(meal);
         }
-        List<MealWithExceed> mealWithExceeds = MealsUtil.getUnfilteredWithExceeded(service.getAll(), 2000);
-        req.setAttribute("list", mealWithExceeds);
-        req.getRequestDispatcher(forward).forward(req, resp);
+        doGet(req,resp);
     }
 
     @Override

@@ -20,6 +20,10 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public void editMeal(Meal meal) {
+        if(getAll().contains(meal)) {
+            delete(meal.getId());
+        }
+        addMeal(meal);
 
     }
 

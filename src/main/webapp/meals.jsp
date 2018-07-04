@@ -27,11 +27,15 @@
 <body>
 <h3><a href="index.html">Home</a></h3>
 <h2>Meals</h2>
+<form method="post" action="meals?action=edit">
+    <button type="submit" name>Insert</button>
+</form>
 <table>
     <tr>
         <th>Дата/Время</th>
         <th>Описание</th>
         <th>Калории</th>
+        <th colspan="2">Действие</th>
     </tr>
         <c:forEach var="meal" items="${list}">
                     <tr style="color:${meal.isExceed()? 'red' : 'green'}">

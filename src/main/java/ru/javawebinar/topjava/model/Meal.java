@@ -19,6 +19,10 @@ public class Meal {
         this.calories = calories;
     }
 
+    public Meal() {
+        this.id = MealRepository.getId();
+    }
+
     public int getId() {
         return id;
     }
