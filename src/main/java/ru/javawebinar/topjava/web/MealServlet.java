@@ -31,7 +31,6 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String forward = "";
         String action = req.getParameter("action");
 
         switch(action){
@@ -39,11 +38,14 @@ public class MealServlet extends HttpServlet {
                 service.delete(Integer.parseInt(req.getParameter("mealId")));
                 break;
             case "edit" :
+                log.debug("redirect to editMeal");
                 String mealId = req.getParameter("mealId");
                 if(mealId != null) {
+                    log.debug("update meal");
                     int id = Integer.parseInt(mealId);
                     meal = service.getMealById(id);
                 }else{
+                    log.debug("insert meal");
                     meal = new Meal();
                     meal.setDateTime(LocalDateTime.now());
                 }
@@ -55,11 +57,13 @@ public class MealServlet extends HttpServlet {
                 meal.setCalories(req.getParameter("calories").equals("")? meal.getCalories() : Integer.parseInt(req.getParameter("calories")));
                 service.editMeal(meal);
         }
+        log.debug(action+" meal");
         doGet(req,resp);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log.debug("redirect to meals");
         List<MealWithExceed> mealWithExceeds = MealsUtil.getUnfilteredWithExceeded(service.getAll(), 2000);
         req.setAttribute("list", mealWithExceeds);
         req.getRequestDispatcher("meals.jsp").forward(req, resp);
