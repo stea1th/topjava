@@ -32,22 +32,10 @@
         <th>Калории</th>
     </tr>
     <c:forEach var="meal" items="${list}">
-        <c:choose>
-        <c:when test="${meal.isExceed()}">
-            <tr style="color: red">
-                <td><javatime:format value="${meal.getDateTime()}" pattern="yyyy-MM-dd HH:mm" /></td>
-                <td><c:out value="${meal.getDescription()}"/></td>
-                <td><c:out value="${meal.getCalories()}"/></td>
-            </tr>
-        </c:when>
-            <c:otherwise>
-                <tr style="color: green">
-                    <td><javatime:format value="${meal.getDateTime()}" pattern="yyyy-MM-dd HH:mm" /></td>
-                    <td><c:out value="${meal.getDescription()}"/></td>
-                    <td><c:out value="${meal.getCalories()}"/></td>
-                </tr>
-            </c:otherwise>
-        </c:choose>
+    <tr style="color:${meal.isExceed()? 'red' : 'green'}">
+        <td><javatime:format value="${meal.getDateTime()}" pattern="yyyy-MM-dd HH:mm" /></td>
+        <td><c:out value="${meal.getDescription()}"/></td>
+        <td><c:out value="${meal.getCalories()}"/></td>
     </c:forEach>
 </table>
 </body>
