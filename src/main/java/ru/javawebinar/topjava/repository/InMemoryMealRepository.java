@@ -5,7 +5,7 @@ import ru.javawebinar.topjava.model.Meal;
 import java.util.List;
 import java.util.Map;
 
-public interface MealRepo {
+public interface InMemoryMealRepository {
     Meal add(Meal meal);
     void delete(int id);
     Meal edit(Meal meal);

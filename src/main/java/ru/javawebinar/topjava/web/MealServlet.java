@@ -3,8 +3,8 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
-import ru.javawebinar.topjava.repository.MealRepo;
-import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.repository.InMemoryMealRepository;
+import ru.javawebinar.topjava.repository.InMemoryMealRepositoryImpl;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -13,10 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -24,12 +22,12 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealServlet extends HttpServlet {
 
     private static final Logger log = getLogger(MealServlet.class);
-    private MealRepo repo;
+    private InMemoryMealRepository repo;
     private Meal meal;
 
 
     public void init() {
-        repo = new MealRepository();
+        repo = new InMemoryMealRepositoryImpl();
     }
 
     @Override
@@ -51,7 +49,7 @@ public class MealServlet extends HttpServlet {
                     meal = repo.getById(id);
                 }else{
                     log.debug("insert meal");
-                    meal = new Meal(MealRepository.getId());
+                    meal = new Meal(InMemoryMealRepositoryImpl.getId());
                     meal.setDateTime(LocalDateTime.now());
                 }
                 req.setAttribute("meal", meal);

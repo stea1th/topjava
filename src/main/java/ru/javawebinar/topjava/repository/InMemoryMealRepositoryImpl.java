@@ -10,11 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class MealRepository implements MealRepo {
+public class InMemoryMealRepositoryImpl implements InMemoryMealRepository {
     private static AtomicInteger id = new AtomicInteger();
     private Map<Integer, Meal> meals = new ConcurrentHashMap<>();
 
-    public MealRepository() {
+    public InMemoryMealRepositoryImpl() {
           Arrays.asList(
                 new Meal(getId(), LocalDateTime.of(2015, Month.MAY, 30, 07, 0), "Завтрак", 500),
                 new Meal(getId(), LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
