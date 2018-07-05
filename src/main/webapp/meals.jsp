@@ -21,6 +21,10 @@
             color: white;
             text-align: left;
         }
+        .button {text-align: center;
+            margin: 0 auto;
+            padding: 5px;
+            }
 
     </style>
 </head>
@@ -43,13 +47,13 @@
                         <td><c:out value="${meal.getDescription()}"/></td>
                         <td><c:out value="${meal.getCalories()}"/></td>
                         <td>
-                            <form method="post" action="meals?action=delete&mealId=<c:out value="${meal.getId()}"/> ">
-                                <button type="submit" name>Delete</button>
+                            <form method="post" class="button" action="meals?action=delete&mealId=<c:out value="${meal.getId()}"/> ">
+                                <button type="submit" >Delete</button>
                             </form>
                         </td>
                         <td>
-                            <form method="post" action="meals?action=edit&mealId=<c:out value="${meal.getId()}"/> ">
-                                <button type="submit" name>Edit</button>
+                            <form method="post" class="button" action="meals?action=edit&mealId=<c:out value="${meal.getId()}"/> ">
+                                <button type="submit" >Edit</button>
                             </form>
                         </td>
                     </tr>

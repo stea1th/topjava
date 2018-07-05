@@ -2,10 +2,9 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.model.MealWithExceed;
-import ru.javawebinar.topjava.service.MealService;
-import ru.javawebinar.topjava.service.MealServiceImpl;
+import ru.javawebinar.topjava.repository.MealRepo;
+import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -14,30 +13,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Comparator;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
 
     private static final Logger log = getLogger(MealServlet.class);
-    private MealService service;
+    private MealRepo repo;
     private Meal meal;
 
-    public MealServlet() {
-        super();
-        service = new MealServiceImpl();
+
+    public void init() {
+        repo = new MealRepository();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         String action = req.getParameter("action");
 
         switch(action){
             case "delete" :
-                service.delete(Integer.parseInt(req.getParameter("mealId")));
+                log.debug(action+" meal");
+                repo.delete(Integer.parseInt(req.getParameter("mealId")));
                 break;
             case "edit" :
                 log.debug("redirect to editMeal");
@@ -45,39 +48,38 @@ public class MealServlet extends HttpServlet {
                 if(mealId != null) {
                     log.debug("update meal");
                     int id = Integer.parseInt(mealId);
-                    meal = service.getMealById(id);
+                    meal = repo.getById(id);
                 }else{
                     log.debug("insert meal");
-                    meal = new Meal();
+                    meal = new Meal(MealRepository.getId());
                     meal.setDateTime(LocalDateTime.now());
                 }
                 req.setAttribute("meal", meal);
-                req.getRequestDispatcher("/editMeal.jsp").forward(req, resp);
+                req.getRequestDispatcher("/editmeal.jsp").forward(req, resp);
                 break;
             case "update" :
-                meal.setDescription(req.getParameter("description").equals("")? meal.getDescription() : req.getParameter("description"));
-                meal.setCalories(req.getParameter("calories").equals("")? meal.getCalories() : Integer.parseInt(req.getParameter("calories")));
-                service.editMeal(meal);
+                String date = req.getParameter("date");
+                if(!date.equals("")){
+                    //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                    meal.setDateTime(LocalDateTime.parse(date));
+                }
+                meal.setDescription(req.getParameter("description").equals("") ? meal.getDescription() : req.getParameter("description"));
+                meal.setCalories(req.getParameter("calories").equals("") ? meal.getCalories() : Integer.parseInt(req.getParameter("calories")));
+                repo.edit(meal);
+
         }
-        log.debug(action+" meal");
-        doGet(req,resp);
+        resp.sendRedirect("meals");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doForward(req, resp);
+    }
+
+    private void doForward(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         log.debug("redirect to meals");
-        List<MealWithExceed> mealWithExceeds = MealsUtil.getUnfilteredWithExceeded(service.getAll(), 2000);
+        List<MealWithExceed> mealWithExceeds = MealsUtil.getUnfilteredWithExceeded(new ArrayList<>(repo.getAll().values()), 2000);
         req.setAttribute("list", mealWithExceeds);
         req.getRequestDispatcher("meals.jsp").forward(req, resp);
-
-
-
-
-
-
-
-
-
-
     }
 }
