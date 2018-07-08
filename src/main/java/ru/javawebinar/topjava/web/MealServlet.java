@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,33 +38,36 @@ public class MealServlet extends HttpServlet {
 
         switch(action){
             case "delete" :
-                log.debug(action+" meal");
-                repo.delete(Integer.parseInt(req.getParameter("mealId")));
+                int id = Integer.parseInt(req.getParameter("mealId"));
+                repo.delete(id);
+                log.info("Delete {}", id);
                 break;
             case "edit" :
                 log.debug("redirect to editMeal");
                 String mealId = req.getParameter("mealId");
                 if(mealId != null) {
-                    log.debug("update meal");
-                    int id = Integer.parseInt(mealId);
+                    id = Integer.parseInt(mealId);
                     meal = repo.getById(id);
+                    log.info("Update {}", meal);
                 }else{
-                    log.debug("insert meal");
                     meal = new Meal(InMemoryMealRepositoryImpl.getId());
-                    meal.setDateTime(LocalDateTime.now());
+                    meal.setDateTime(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS));
+                    meal.setCalories(1000);
+                    log.info("Insert {}", meal);
                 }
                 req.setAttribute("meal", meal);
-                req.getRequestDispatcher("/editmeal.jsp").forward(req, resp);
+                req.getRequestDispatcher("editmeal.jsp").forward(req, resp);
                 break;
             case "update" :
                 String date = req.getParameter("date");
                 if(!date.equals("")){
                     //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                    meal.setDateTime(LocalDateTime.parse(date));
+                    meal.setDateTime(LocalDateTime.parse(date).truncatedTo(ChronoUnit.HOURS));
                 }
                 meal.setDescription(req.getParameter("description").equals("") ? meal.getDescription() : req.getParameter("description"));
                 meal.setCalories(req.getParameter("calories").equals("") ? meal.getCalories() : Integer.parseInt(req.getParameter("calories")));
                 repo.edit(meal);
+                log.info("Edited {}", meal);
 
         }
         resp.sendRedirect("meals");

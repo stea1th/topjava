@@ -42,17 +42,18 @@
         <th colspan="2">Действие</th>
     </tr>
         <c:forEach var="meal" items="${list}">
-                    <tr style="color:${meal.isExceed()? 'red' : 'green'}">
-                        <td><javatime:format value="${meal.getDateTime()}" pattern="yyyy-MM-dd HH:mm" /></td>
-                        <td><c:out value="${meal.getDescription()}"/></td>
-                        <td><c:out value="${meal.getCalories()}"/></td>
+            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
+                    <tr style="color:${meal.exceed? 'red' : 'green'}">
+                        <td><javatime:format value="${meal.dateTime}" pattern="yyyy-MM-dd HH:mm" /></td>
+                        <td><c:out value="${meal.description}"/></td>
+                        <td><c:out value="${meal.calories}"/></td>
                         <td>
-                            <form method="post" class="button" action="meals?action=delete&mealId=<c:out value="${meal.getId()}"/> ">
+                            <form method="post" class="button" action="meals?action=delete&mealId=<c:out value="${meal.id}"/> ">
                                 <button type="submit" >Delete</button>
                             </form>
                         </td>
                         <td>
-                            <form method="post" class="button" action="meals?action=edit&mealId=<c:out value="${meal.getId()}"/> ">
+                            <form method="post" class="button" action="meals?action=edit&mealId=<c:out value="${meal.id}"/> ">
                                 <button type="submit" >Edit</button>
                             </form>
                         </td>
