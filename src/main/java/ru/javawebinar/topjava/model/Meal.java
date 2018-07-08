@@ -59,7 +59,7 @@ public class Meal {
 
     @Override
     public String toString() {
-        return "Meal{" +
+         return "Meal{" +
                 "id=" + id +
                 ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +

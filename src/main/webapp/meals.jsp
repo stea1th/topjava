@@ -54,7 +54,7 @@
                         </td>
                         <td>
                             <form method="post" class="button" action="meals?action=edit&mealId=<c:out value="${meal.id}"/> ">
-                                <button type="submit" >Edit</button>
+                                <button type="submit"  >Edit</button>
                             </form>
                         </td>
                     </tr>

@@ -31,7 +31,7 @@
             </tr>
             <tr >
                 <td colspan="2"  align="right" ><button type="submit">Update</button>
-                    <button onclick="window.history.back()" type="button">Cancel</button>
+                    <button onclick="window.history.back()"  type="button">Cancel</button>
                 </td>
             </tr>
 

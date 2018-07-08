@@ -62,7 +62,7 @@ public class MealServlet extends HttpServlet {
                 String date = req.getParameter("date");
                 if(!date.equals("")){
                     //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                    meal.setDateTime(LocalDateTime.parse(date).truncatedTo(ChronoUnit.HOURS));
+                     meal.setDateTime(LocalDateTime.parse(date).truncatedTo(ChronoUnit.HOURS));
                 }
                 meal.setDescription(req.getParameter("description").equals("") ? meal.getDescription() : req.getParameter("description"));
                 meal.setCalories(req.getParameter("calories").equals("") ? meal.getCalories() : Integer.parseInt(req.getParameter("calories")));
