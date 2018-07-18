@@ -15,7 +15,13 @@ public class UserServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.debug("forward to users");
-        request.getRequestDispatcher("/meals.jsp").forward(request, response);
+        log.debug("forward to meals");
+        SecurityUtil.setAuthUserId(Integer.parseInt(request.getParameter("userId")));
+        request.getRequestDispatcher("meals").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //super.doPost(req, resp);
     }
 }
