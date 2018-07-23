@@ -19,11 +19,13 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
@@ -33,43 +35,31 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
-@Slf4j 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
-    private static List<String> result = new LinkedList<>();
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+
+    private static StringBuilder stringBuilder = new StringBuilder("\n");
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
     @Rule
-    public final TestWatcher watcher = new TestWatcher() {
-
-        private long start;
-        private long finish;
-
+    public Stopwatch stopwatch = new Stopwatch() {
         @Override
-        protected void starting(Description description) {
-            //start = new Date().getTime();     -- что предпочтительнее?
-            start = System.currentTimeMillis();
-        }
-
-        @Override
-        protected void finished(Description description) {
-            //finish = new Date().getTime();
-            finish = System.currentTimeMillis();
-            String testResult = description.getMethodName()+": "+(finish - start)+"ms";
-            result.add("Method name "+testResult);
+        protected void finished(long nanos, Description description) {
+            String testResult = description.getMethodName()+ ": "+nanos+" ns";
+            stringBuilder.append("Method name ").append(testResult).append("\n");
             log.info(testResult);
         }
     };
 
     @AfterClass
     public static void printResult(){
-        System.out.println("--------------------");
-        result.forEach(System.out::println);
-        System.out.println("--------------------");
+        log.info(stringBuilder.toString());
     }
 
     static {
@@ -89,8 +79,6 @@ public class MealServiceTest {
     public void deleteNotFound() throws Exception {
         exception.expect(NotFoundException.class);
         service.delete(MEAL1_ID, 1);
-        throw new NotFoundException("Not Found");
-
     }
 
     @Test
@@ -108,9 +96,8 @@ public class MealServiceTest {
 
     @Test
     public void getNotFound() throws Exception {
-        exception.expect(NoResultException.class);
+        exception.expect(NotFoundException.class);
         service.get(MEAL1_ID, ADMIN_ID);
-        throw new NoResultException();
     }
 
     @Test
@@ -124,7 +111,6 @@ public class MealServiceTest {
     public void updateNotFound() throws Exception {
         exception.expect(NotFoundException.class);
         service.update(MEAL1, ADMIN_ID);
-        throw new NotFoundException("NotFoundException");
     }
 
     @Test
