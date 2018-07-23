@@ -2,14 +2,14 @@ package ru.javawebinar.topjava.service;
 
 import org.hibernate.LazyInitializationException;
 import org.junit.AfterClass;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.rules.RuleChain;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
+import org.junit.rules.*;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,6 +18,7 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDate;
@@ -36,10 +37,13 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+
     private static List<String> result = new LinkedList<>();
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
+
     @Rule
     public final TestWatcher watcher = new TestWatcher() {
 
@@ -48,16 +52,17 @@ public class MealServiceTest {
 
         @Override
         protected void starting(Description description) {
-            start = new Date().getTime();
-
+            //start = new Date().getTime();     -- что предпочтительнее?
+            start = System.currentTimeMillis();
         }
 
         @Override
         protected void finished(Description description) {
-            finish = new Date().getTime();
+            //finish = new Date().getTime();
+            finish = System.currentTimeMillis();
             String testResult = description.getMethodName()+": "+(finish - start)+"ms";
-            result.add(testResult);
-            System.out.println(testResult);
+            result.add("Method name "+testResult);
+            log.info(testResult);
         }
     };
 
@@ -68,15 +73,12 @@ public class MealServiceTest {
         System.out.println("--------------------");
     }
 
-
     static {
         SLF4JBridgeHandler.install();
     }
 
     @Autowired
     private MealService service;
-
-
 
     @Test
     public void delete() throws Exception {
@@ -105,9 +107,11 @@ public class MealServiceTest {
         assertMatch(actual, ADMIN_MEAL1);
     }
 
-    @Test(expected = NoResultException.class)
+    @Test
     public void getNotFound() throws Exception {
+        exception.expect(NoResultException.class);
         service.get(MEAL1_ID, ADMIN_ID);
+        throw new NoResultException();
     }
 
     @Test
@@ -131,10 +135,9 @@ public class MealServiceTest {
 
     @Test
     public void getBetween() throws Exception {
-        exception.expect(LazyInitializationException.class);
         assertMatch(service.getBetweenDates(
                 LocalDate.of(2015, Month.MAY, 30),
                 LocalDate.of(2015, Month.MAY, 30), USER_ID), MEAL3, MEAL2, MEAL1);
-        throw new LazyInitializationException("I was too lazy");
+
     }
 }

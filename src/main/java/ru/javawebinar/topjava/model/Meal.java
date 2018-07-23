@@ -19,7 +19,8 @@ import java.time.LocalTime;
         @NamedQuery(name = Meal.GET_ALL, query = "SELECT m FROM Meal m " +
                 "WHERE m.user.id=:userId ORDER BY m.dateTime DESC "),
         @NamedQuery(name = Meal.GET_BETWEEN, query = "SELECT m FROM Meal m " +
-                "WHERE m.user.id=:userId AND m.dateTime BETWEEN :start AND :end ")
+                "WHERE m.user.id=:userId AND m.dateTime BETWEEN :start AND :end " +
+                "ORDER BY m.dateTime DESC ")
 
 })
 
