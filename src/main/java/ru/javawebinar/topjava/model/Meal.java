@@ -47,7 +47,7 @@ public class Meal extends AbstractBaseEntity {
     @Range(min = 10, max = 10000)
     private int calories;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -106,13 +106,24 @@ public class Meal extends AbstractBaseEntity {
         this.user = user;
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return "Meal{" +
                 "id=" + id +
                 ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
+                '}';
+    }*/
+
+    @Override
+    public String toString() {
+        return "Meal{" +
+                "dateTime=" + dateTime +
+                ", description='" + description + '\'' +
+                ", calories=" + calories +
+                ", user=" + user +
+                ", id=" + id +
                 '}';
     }
 }
