@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+
 import static java.util.stream.Collectors.toList;
 
 public class MealsUtil {
@@ -25,7 +26,7 @@ public class MealsUtil {
     }
 
     public static List<MealWithExceed> getFilteredWithExceeded(Collection<Meal> meals, int caloriesPerDay, LocalTime startTime, LocalTime endTime) {
-        return getFilteredWithExceeded(meals, caloriesPerDay, meal -> Util.isBetween(meal.getTime(), startTime, endTime));
+        return getFilteredWithExceeded(meals, caloriesPerDay, meal -> Util.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime));
     }
 
     private static List<MealWithExceed> getFilteredWithExceeded(Collection<Meal> meals, int caloriesPerDay, Predicate<Meal> filter) {
