@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.LazyInitializationException;
 import org.junit.AfterClass;
 import org.junit.ClassRule;
@@ -18,7 +19,6 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDate;
@@ -33,11 +33,10 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
+@Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
-
-    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
 
     private static List<String> result = new LinkedList<>();
 
