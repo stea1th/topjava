@@ -1,12 +1,10 @@
 package ru.javawebinar.topjava.service;
 
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.LazyInitializationException;
 import org.junit.AfterClass;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.*;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -19,13 +17,9 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-import ru.javawebinar.topjava.web.meal.MealRestController;
 
-import javax.persistence.NoResultException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
@@ -51,14 +45,14 @@ public class MealServiceTest {
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            String testResult = description.getMethodName()+ ": "+nanos+" ns";
+            String testResult = description.getMethodName() + ": " + nanos + " ns";
             stringBuilder.append("Method name ").append(testResult).append("\n");
             log.info(testResult);
         }
     };
 
     @AfterClass
-    public static void printResult(){
+    public static void printResult() {
         log.info(stringBuilder.toString());
     }
 
