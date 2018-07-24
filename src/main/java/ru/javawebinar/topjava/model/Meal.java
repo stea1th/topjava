@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.model;
 
-import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
