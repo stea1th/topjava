@@ -6,7 +6,7 @@ public class Profiles {
             JPA = "jpa",
             DATAJPA = "datajpa";
 
-    public static final String REPOSITORY_IMPLEMENTATION = DATAJPA;
+    public static final String REPOSITORY_IMPLEMENTATION = JPA;
 
     public static final String
             POSTGRES_DB = "postgres",
@@ -26,4 +26,11 @@ public class Profiles {
             }
         }
     }
+
+    public static String getActiveRepo(){
+        System.out.println(System.getProperty("spring.profiles.active"));
+        return System.getProperty("spring.profiles.active");
+    }
+
+
 }
