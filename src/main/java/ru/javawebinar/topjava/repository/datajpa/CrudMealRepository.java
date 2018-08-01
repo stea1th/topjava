@@ -10,18 +10,20 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
-    @Transactional
+
     List<Meal> findAllByUserIdOrderByDateTimeDesc(int userId);
 
-    @Transactional
+
     List<Meal> findAllByDateTimeBetweenAndUserIdOrderByDateTimeDesc(LocalDateTime startDate, LocalDateTime endDate, int userId);
 
     @Transactional
     int deleteMealByIdAndUserId(int id, int userId);
 
-    @Transactional
-    Meal save(Meal meal);
 
     @Transactional
+    @Override
+    Meal save(Meal meal);
+
+
     Meal findFirstByIdAndUserId(int id, int userId);
 }

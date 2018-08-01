@@ -59,5 +59,6 @@ public abstract class AbstractBaseEntityTest {
                 "\n---------------------------------" +
                 results +
                 "\n---------------------------------");
+        results.delete(0, results.length());
     }
 }

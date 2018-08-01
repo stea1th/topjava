@@ -16,7 +16,7 @@ import java.util.List;
 import static ru.javawebinar.topjava.UserTestData.*;
 
 
-public abstract class AbstractUserServiceTest extends AbstractBaseEntityTest{
+public abstract class AbstractUserServiceTest extends AbstractBaseEntityTest {
 
     @Autowired
     private UserService service;
