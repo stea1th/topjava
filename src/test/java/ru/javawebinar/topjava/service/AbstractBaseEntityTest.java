@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.service;
 
 
 import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.Stopwatch;
@@ -52,6 +53,11 @@ public abstract class AbstractBaseEntityTest {
         SLF4JBridgeHandler.install();
     }
 
+    @BeforeClass
+    public static void clearStringBuilder(){
+        results.delete(0, results.length());
+    }
+
     @AfterClass
     public static void printResult() {
         log.info("\n---------------------------------" +
@@ -59,6 +65,6 @@ public abstract class AbstractBaseEntityTest {
                 "\n---------------------------------" +
                 results +
                 "\n---------------------------------");
-        results.delete(0, results.length());
+
     }
 }
